@@ -1,0 +1,140 @@
+<%- include('partials/header', { title: 'Edit Post', user: user }) %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0 h4">
+            <i class="fas fa-edit me-2"></i>
+            Edit Post
+          </h2>
+        </div>
+        <div class="card-body p-4">
+
+          <form action="/posts/<%= post._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+
+            <!-- Error Alert -->
+            <% if (error) { %>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <% } %>
+
+            <!-- Success Alert -->
+            <% if (success) { %>
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <%= success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <% } %>
+
+            <!-- Title Field -->
+            <div class="mb-3">
+              <label for="title" class="form-label fw-semibold ">
+                Post Title
+              </label>
+              <input type="text"
+                     class="form-control form-control border-2"
+                     name="title"
+                     id="title"
+                     placeholder="Enter an engaging title for your post"
+                     value="<%= post.title %>"
+                     required />
+            </div>
+
+            <!-- Content Field -->
+            <div class="mb-3">
+              <label for="content" class="form-label fw-semibold">
+                Post Content
+              </label>
+              <textarea class="form-control border-2"
+                        name="content"
+                        id="content"
+                        rows="4"
+                        placeholder="Write your post content here... Share your thoughts, stories, or insights"><%= post.content %></textarea>
+    
+            </div>
+
+            <!-- Author Field -->
+            <div class="mb-3">
+              <label for="author" class="form-label fw-semibold text-dark">
+                <i class="fas fa-user me-1"></i>
+                Author
+              </label>
+              <input type="text"
+                     class="form-control bg-light"
+                     name="author"
+                     id="author"
+                     value="<%= user ? user.username : 'Unknown Author' %>"
+                     readonly />
+              <div class="form-text text-muted">Author information cannot be changed</div>
+            </div>
+
+            <!-- Current Images Display -->
+            <% if (post?.images?.length > 0) { %>
+              <div class="mb-3">
+                <label class="form-label fw-semibold ">
+                  Current Images
+                </label>
+                <div class="row g-3">
+                  <% post.images.forEach((image, index) => { %>
+                    <div class="col-md-4 col-sm-6">
+                      <div class="position-relative">
+                        <img src="<%= image.url %>"
+                             class="img-fluid rounded shadow-sm border"
+                             alt="Current post image"
+                             style="width: 100%; height: 120px; object-fit: cover;">
+                       
+                      </div>
+                    </div>
+                  <% }); %>
+                </div>
+                <div class="form-text">These images are currently associated with your post</div>
+              </div>
+            <% } %>
+
+            <!-- Image Upload Field -->
+            <div class="mb-4">
+              <label for="image" class="form-label fw-semibold text-dark">
+                <i class="fas fa-camera me-1"></i>
+                Add New Images
+              </label>
+              <input type="file"
+                     class="form-control border-2"
+                     name="image"
+                     id="image"
+                     multiple
+                     accept="image/*" />
+              <div class="form-text">Optional: Upload additional images (JPG, PNG, JPEG). You can select multiple files</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex flex-wrap gap-2 pt-3 border-top">
+              <button type="submit" class="btn btn-success btn-md px-4">
+                <i class="fas fa-save me-2"></i>
+                Update Post
+              </button>
+
+              <a href="/posts/<%= post._id %>" class="btn btn-outline-secondary btn-md px-4">
+                <i class="fas fa-times me-2"></i>
+                Cancel
+              </a>
+
+              <a href="/posts/all" class="btn btn-outline-primary btn-md px-4">
+                <i class="fas fa-list me-2"></i>
+                All Posts
+              </a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

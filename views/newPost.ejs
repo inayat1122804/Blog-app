@@ -1,0 +1,93 @@
+<%- include('partials/header', { title: 'Create New Post' , user: user }) %>
+
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Create a New Post</h2>
+          </div>
+          <div class="card-body">
+
+            <form action="/posts" method="POST" enctype="multipart/form-data" onsubmit=" return validateForm()" >
+               <% if (error) {%>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+             <%} %>
+
+             <% if (success) {%>
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+             <%} %>
+              <div class="mb-3">
+                <label for="title" class="form-label">Post Title</label>
+                <input type="text" class="form-control" name="title" id="title" placeholder="Enter post title"
+                  />
+              </div>
+
+              <div class="mb-3">
+                <label for="content" class="form-label">Post Content</label>
+                <textarea class="form-control" name="content" id="content" rows="6"
+                  placeholder="Write your post content here..."></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="author" class="form-label">Author</label>
+                <input type="text" class="form-control" name="author" id="author" placeholder="Enter author name"
+                  required />
+              </div>
+
+              <div class="mb-3">
+              <label for="image" class="form-label">Upload Images (Optional)</label>
+              <input type="file" class="form-control" name="image" id="image" multiple onchange="previewImages()" />
+              </div>
+
+    
+              <div id="image-Preview" class="mt-3 d-flex flex-wrap"></div>
+
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-save"></i> Create Post
+                </button>
+                <a href="/" class="btn btn-secondary">
+                  <i class="fas fa-times"></i> Cancel
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // img preview
+      function previewImages(){
+        const preview = document.getElementById("image-Preview");
+        preview.innerHTML = "";
+        const files = document.getElementById("image").files;
+        for (let i = 0; i < files.length; i++) {
+          const img = document.createElement("img");
+          img.src = URL.createObjectURL(files[i]);
+          img.classList.add("img-thumbnail", "mr-2", "mb-2");
+          img.style.maxWidth = "150px";
+          preview.appendChild(img);
+        }
+      }
+
+      // validate form
+      function validateForm() {
+        const title = document.getElementById("title").value;
+        const content = document.getElementById("content").value;
+        if (!title || !content) {
+          return alert("Title and Content are required!");
+          return false;
+        }
+        return true;
+      }
+    </script>
+  </div>
+
+  <%- include('partials/footer') %>

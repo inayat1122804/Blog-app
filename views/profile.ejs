@@ -1,0 +1,205 @@
+<%- include('partials/header', { title: 'Profile', user: user }) %>
+
+<div class="container py-5">
+
+  <!-- Profile Card -->
+  <div class="row justify-content-center mb-5">
+
+    <div class="col-lg-8">
+
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+        <!-- Cover -->
+        <div class="bg-dark" style="height: 220px;"></div>
+
+        <div class="card-body text-center">
+
+          <!-- Profile Picture -->
+          <% if (user?.profilePicture && user?.profilePicture?.url) { %>
+
+            <img
+              src="<%= user.profilePicture.url %>"
+              alt="<%= user.username %>"
+              class="rounded-circle border border-5 border-white shadow"
+              width="170"
+              height="170"
+              style="object-fit: cover; margin-top: -100px;"
+            >
+
+          <% } else { %>
+
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              alt="Default Profile Picture"
+              class="rounded-circle border border-5 border-white shadow"
+              width="170"
+              height="170"
+              style="object-fit: cover; margin-top: -100px;"
+            >
+
+          <% } %>
+
+          <!-- User Info -->
+          <h2 class="fw-bold mt-4">
+            <%= user.username %>
+          </h2>
+
+          <p class="text-muted fs-5">
+            <%= user.email %>
+          </p>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-center gap-3 mt-4">
+              <!-- Update Profile -->
+              <a
+                href="/user/edit"
+                class="btn btn-primary rounded-pill px-4"
+              >
+                Update Profile
+              </a>
+              <!-- Delete Profile -->
+              <form
+                action="/user/delete"
+                method="POST"
+                onsubmit="return confirm('Are you sure you want to delete your profile?')"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-danger rounded-pill px-4"
+                >
+                  Delete Profile
+                </button>
+              </form>
+            </div>
+
+          <% if (user?.bio) { %>
+
+            <div class="alert alert-light border rounded-4 mt-4">
+              <%= user.bio %>
+            </div>
+
+          <% } %>
+
+          <!-- User Stats -->
+          <div class="row justify-content-center mt-4 g-3">
+            <div class="col-md-4">
+              <div class="card bg-primary text-white border-0 rounded-4 shadow-sm">
+                <div class="card-body">
+                  <h6>Total Posts</h6>
+                  <h2 class="fw-bold">
+                    <%= posts?.length || 0 %>
+                  </h2>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-5">
+              <div class="card bg-dark text-white border-0 rounded-4 shadow-sm">
+                <div class="card-body">
+                  <h6>Date Joined</h6>
+                  <p class="mb-0 ">
+                    <%= user?.createdAt
+                      ? new Date(user.createdAt).toDateString()
+                      : "No date available" %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Posts Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="fw-bold">
+      User Posts
+    </h2>
+
+    <span class="badge bg-dark rounded-pill px-3 py-2 fs-6">
+      <%= posts?.length || 0 %> Posts
+    </span>
+
+  </div>
+
+  <!-- Posts -->
+  <% if (posts?.length > 0) { %>
+
+    <div class="row g-4">
+
+      <% posts.forEach(post => { %>
+
+        <div class="col-md-6 col-lg-4">
+
+          <div class="card h-100 border-0 shadow rounded-4 overflow-hidden">
+
+            <!-- Post Image -->
+            <% if (post?.images?.length > 0) { %>
+
+              <img
+                src="<%= post.images[0].url %>"
+                alt="<%= post.title %>"
+                class="card-img-top"
+                style="height: 230px; object-fit: cover;"
+              >
+
+            <% } else { %>
+
+              <img
+                src="https://via.placeholder.com/500x300?text=No+Image"
+                alt="No Image"
+                class="card-img-top"
+                style="height: 230px; object-fit: cover;"
+              >
+
+            <% } %>
+
+            <!-- Post Content -->
+            <div class="card-body d-flex flex-column">
+
+              <h4 class="fw-bold mb-3">
+                <%= post.title %>
+              </h4>
+
+              <p class="text-muted">
+                <%= post.content.substring(0, 100) %>...
+              </p>
+
+              <a
+                href="/posts/<%= post._id %>"
+                class="btn btn-dark rounded-pill mt-auto"
+              >
+                Read More
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      <% }) %>
+
+    </div>
+
+  <% } else { %>
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+      <div class="card-body text-center py-5">
+
+        <h4 class="text-muted">
+          No posts found
+        </h4>
+
+      </div>
+
+    </div>
+
+  <% } %>
+
+</div>
+
+<%- include('partials/footer') %>

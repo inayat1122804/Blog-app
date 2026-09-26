@@ -1,0 +1,19 @@
+<%- include('partials/header', { title: 'Error', user: user }) %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow border-danger">
+        <div class="card-header bg-danger text-white">
+          <h2 class="mb-0">Something went wrong!</h2>
+        </div>
+        <div class="card-body">
+          <p class="lead text-danger"><%= error || "An unexpected error occurred." %></p>
+          <a href="/posts/new" class="btn btn-primary">Back to create post</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
